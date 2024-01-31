@@ -701,8 +701,9 @@ class OpenMLDataset(OpenMLBase):
             try:
                 # TODO(eddiebergman): float32?
                 print(f"data: {data}")
-                print(f"data.dtype: {data.dtype}")
-                return_array = np.asarray(data, dtype=np.float32)
+                print(f"data.dtypes: {data.dtypes}")
+                #return_array = np.asarray(data, dtype=np.float32)
+                return_array = data.values
             except ValueError as e:
                 raise PyOpenMLError(
                     "PyOpenML cannot handle string when returning numpy"
