@@ -840,7 +840,7 @@ class OpenMLDataset(OpenMLBase):
                 y_temp = data.iloc[:, targets]
                 subx = ns.SubSampler(y = y_temp.values, n_samples=n_samples, seed = seed)
                 idx = subx.subsample()
-                y = y_temp[idx]
+                y = y_temp.values[idx]
             else:
                 x = data[:, ~targets]
                 y_temp = data[:, targets].astype(target_dtype)  # type: ignore
