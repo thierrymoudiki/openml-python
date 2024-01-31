@@ -702,7 +702,7 @@ class OpenMLDataset(OpenMLBase):
                 # TODO(eddiebergman): float32?
                 # print(f"data: {data}")                
                 #return_array = np.asarray(data, dtype=np.float32)
-                return_array = data.values
+                return_array = data
             except ValueError as e:
                 raise PyOpenMLError(
                     "PyOpenML cannot handle string when returning numpy"
