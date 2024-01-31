@@ -700,8 +700,7 @@ class OpenMLDataset(OpenMLBase):
 
             try:
                 # TODO(eddiebergman): float32?
-                print(f"data: {data}")
-                print(f"data.dtypes: {data.dtypes}")
+                # print(f"data: {data}")                
                 #return_array = np.asarray(data, dtype=np.float32)
                 return_array = data.values
             except ValueError as e:
