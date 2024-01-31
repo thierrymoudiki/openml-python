@@ -863,7 +863,11 @@ class OpenMLDataset(OpenMLBase):
                 # need to flatten it to a 1-d array for _convert_array_format()
                 y = y.squeeze()
             y = self._convert_array_format(y, dataset_format, target_names)
-            y = y.astype(target_dtype) if isinstance(y, np.ndarray) else y
+            try:
+                if isinstance(y, np.ndarray): 
+                    y = y.astype(target_dtype) 
+            except:
+                pass 
             if len(y.shape) > 1 and y.shape[1] == 1:
                 # single column targets should be 1-d for both `array` and `dataframe` formats
                 assert isinstance(y, (np.ndarray, pd.DataFrame, pd.Series))
