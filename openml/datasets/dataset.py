@@ -835,22 +835,20 @@ class OpenMLDataset(OpenMLBase):
             ]
             target_dtype = int if target_categorical[0] else float
 
-            if isinstance(data, pd.DataFrame):
-                x = data.iloc[:, ~targets]
-                y_temp = data.iloc[:, targets]
-                print(f"y_temp.shape: {y_temp.shape}")
+            if isinstance(data, pd.DataFrame):                
+                y_temp = data.iloc[:, targets] # n x 1                
                 subx = ns.SubSampler(y = y_temp.values, n_samples=n_samples, seed = seed)
                 idx = subx.subsample()
-                print(f"idx: {idx}")
+                print(f"number of samples: {len(idx)}")
                 y = y_temp.values[idx]
-            else:
-                x = data[:, ~targets]
-                y_temp = data[:, targets].astype(target_dtype)  # type: ignore
-                print(f"y_temp.shape: {y_temp.shape}")
+                x = data.iloc[idx, ~targets]
+            else:                
+                y_temp = data[:, targets].astype(target_dtype)   # n x 1 # type: ignore                
                 subx = ns.SubSampler(y = y_temp, n_samples=n_samples, seed = seed)
                 idx = subx.subsample()
-                print(f"idx: {idx}")
+                print(f"number of samples: {len(idx)}")
                 y = y_temp[idx]
+                x = data[idx, ~targets]
 
             categorical = [cat for cat, t in zip(categorical, targets) if not t]
             attribute_names = [att for att, k in zip(attribute_names, targets) if not k]
