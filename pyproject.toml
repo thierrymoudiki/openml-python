@@ -19,6 +19,7 @@ dependencies = [
   "numpy>=1.6.2",
   "minio",
   "pyarrow",
+  "nnetsauce"
 ]
 requires-python = ">=3.8"
 authors = [
@@ -81,6 +82,7 @@ examples=[
     "ipython",
     "ipykernel",
     "seaborn",
+    "nnetsauce"
 ]
 examples_unix=["fanova"]
 docs=[
