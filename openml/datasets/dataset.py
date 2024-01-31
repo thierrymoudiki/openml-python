@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import gzip
 import logging
+import nnetsauce as ns 
 import pickle
 import re
 import warnings
@@ -741,6 +742,8 @@ class OpenMLDataset(OpenMLBase):
     def get_data(  # noqa: C901, PLR0912, PLR0915
         self,
         target: list[str] | str | None = None,
+        n_samples = 3000,
+        seed = 123,
         include_row_id: bool = False,  # noqa: FBT001, FBT002
         include_ignore_attribute: bool = False,  # noqa: FBT001, FBT002
         dataset_format: Literal["array", "dataframe"] = "dataframe",
@@ -757,6 +760,8 @@ class OpenMLDataset(OpenMLBase):
         target : string, List[str] or None (default=None)
             Name of target column to separate from the data.
             Splitting multiple columns is currently not supported.
+        n_samples: int, number of samples 
+        seed: int, random seed 
         include_row_id : boolean (default=False)
             Whether to include row ids in the returned dataset.
         include_ignore_attribute : boolean (default=False)
@@ -832,10 +837,16 @@ class OpenMLDataset(OpenMLBase):
 
             if isinstance(data, pd.DataFrame):
                 x = data.iloc[:, ~targets]
-                y = data.iloc[:, targets]
+                y_temp = data.iloc[:, targets]
+                subx = ns.SubSampler(y = y_temp.values, n_samples=n_samples, seed = seed)
+                idx = subx.subsample()
+                y = y_temp[idx]
             else:
                 x = data[:, ~targets]
-                y = data[:, targets].astype(target_dtype)  # type: ignore
+                y_temp = data[:, targets].astype(target_dtype)  # type: ignore
+                subx = ns.SubSampler(y = y_temp, n_samples=n_samples, seed = seed)
+                idx = subx.subsample()
+                y = y_temp[idx]
 
             categorical = [cat for cat, t in zip(categorical, targets) if not t]
             attribute_names = [att for att, k in zip(attribute_names, targets) if not k]
