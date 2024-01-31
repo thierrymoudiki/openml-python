@@ -838,14 +838,18 @@ class OpenMLDataset(OpenMLBase):
             if isinstance(data, pd.DataFrame):
                 x = data.iloc[:, ~targets]
                 y_temp = data.iloc[:, targets]
+                print(f"y_temp.shape: {y_temp.shape}")
                 subx = ns.SubSampler(y = y_temp.values, n_samples=n_samples, seed = seed)
                 idx = subx.subsample()
+                print(f"idx: {idx}")
                 y = y_temp.values[idx]
             else:
                 x = data[:, ~targets]
                 y_temp = data[:, targets].astype(target_dtype)  # type: ignore
+                print(f"y_temp.shape: {y_temp.shape}")
                 subx = ns.SubSampler(y = y_temp, n_samples=n_samples, seed = seed)
                 idx = subx.subsample()
+                print(f"idx: {idx}")
                 y = y_temp[idx]
 
             categorical = [cat for cat, t in zip(categorical, targets) if not t]
